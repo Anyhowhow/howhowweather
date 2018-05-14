@@ -18,6 +18,14 @@
         android:layout_weight="1"
         android:gravity="center"
         android:textColor="#fff"/>
+    <ImageView
+        android:id="@+id/forecast_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:scaleType="fitCenter" />
     <TextView
         android:id="@+id/max_text"
         android:layout_width="0dp"
@@ -27,12 +35,22 @@
         android:gravity="right"
         android:textColor="#fff"/>
     <TextView
+        android:id="@+id/wavy_line"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_gravity="center"
+        android:gravity="right"
+        android:text="@string/wavy_line"
+        android:textSize="20sp"
+        android:textColor="#fff"/>
+    <TextView
         android:id="@+id/min_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:gravity="right"
+        android:gravity="center"
         android:textColor="#fff"/>
 
 </LinearLayout>

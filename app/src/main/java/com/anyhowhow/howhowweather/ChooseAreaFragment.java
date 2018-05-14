@@ -70,7 +70,7 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 }else if (currentLevel==LEVEL_COUNTY){
                     String weatherId = countyList.get(position).getWeatherId();
-                    if (getActivity() instanceof MainActivity){
+                    if (getActivity() instanceof MainActivity ){
                         Intent intent = new Intent(getActivity(),WeatherActivity.class);
                         intent.putExtra("weather_id",weatherId);
                         startActivity(intent);
