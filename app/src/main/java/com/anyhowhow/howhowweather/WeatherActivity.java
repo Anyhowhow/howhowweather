@@ -66,8 +66,6 @@ public class WeatherActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public NavigationView navigationView;
     private Button button;
-    private View navHeader;
-    private ImageView navBackground;
     private CircleImageView circleImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +91,6 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         button = (Button)findViewById(R.id.change_city);
-        //circleImageView = (CircleImageView)navHeader.findViewById(R.id.icon_image);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = preferences.getString("weather",null);
         if (weatherString != null){
@@ -146,15 +143,24 @@ public class WeatherActivity extends AppCompatActivity {
 
     }
     public void GaussianBlur(){
+        View navHeader;
+        ImageView navBackground;
         Bitmap userImg;
         Bitmap navBackImg;
-        //navHeader = View.inflate(this,R.layout.nav_header,null);
         navHeader = navigationView.getHeaderView(0);
         navBackground = (ImageView)navHeader.findViewById(R.id.nav_background);
-        userImg = BitmapFactory.decodeResource(getResources(), R.drawable.nav_anyhow);
-        navBackImg = blur(userImg);
-        //Glide.with(WeatherActivity.this).load(navBackImg).into(navBackground);
-        navBackground.setImageBitmap(navBackImg);
+        circleImageView = (CircleImageView)navHeader.findViewById(R.id.icon_image);
+        //新方案
+        Drawable originDrawable = circleImageView.getDrawable();
+        BitmapDrawable temImg = (BitmapDrawable)originDrawable;
+        Bitmap bingBitmap = temImg.getBitmap();
+        Bitmap GaussianBlurImg = blur(bingBitmap);
+        navBackground.setImageBitmap(GaussianBlurImg);
+        //旧方案
+//        userImg = BitmapFactory.decodeResource(getResources(), R.drawable.nav_anyhow);
+//        navBackImg = blur(userImg);
+//        //Glide.with(WeatherActivity.this).load(navBackImg).into(navBackground);
+//        navBackground.setImageBitmap(navBackImg);
     }
     public Bitmap blur(Bitmap image) {
         float BITMAP_SCALE = 0.2f;
