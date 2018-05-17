@@ -18,6 +18,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -67,8 +68,8 @@ public class LocationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LocationActivity.this,WeatherActivity.class);
                 startActivity(intent);
+                finish();
             }
-
         });
     }
         private void requestLocation () {
@@ -121,25 +122,31 @@ public class LocationActivity extends AppCompatActivity {
             }
         }
         private void navigateTo (BDLocation location){
+            StringBuilder currentPosition = new StringBuilder();
+            //展开地图，地图中心点位置为当前定位位置
             if (isfirstLocate){
-                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-                baiduMap.animateMapStatus(update);
-                update = MapStatusUpdateFactory.zoomTo(16f);
-                baiduMap.animateMapStatus(update);
-                isfirstLocate = false;
-                }
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+            MapStatus mMapStatus = new MapStatus.Builder().target(ll).zoom(16).build();
+            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+            baiduMap.setMapStatus(mMapStatusUpdate);
+            isfirstLocate = false;
+            }
+            //在地图上显示我的位置
             MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
             locationBuilder.latitude(location.getLatitude());
             locationBuilder.longitude(location.getLongitude());
             MyLocationData locationData = locationBuilder.build();
             baiduMap.setMyLocationData(locationData);
+            //显示当前位置
+            currentPosition.append(location.getProvince());
+            currentPosition.append(location.getCity());
+            currentPosition.append(location.getDistrict());
+            currentPosition.append(location.getStreet());
+            position_text.setText(currentPosition);
         }
         public class MyLocationListener implements BDLocationListener {
             @Override
             public void onReceiveLocation(BDLocation location) {
-            StringBuilder currentPosition = new StringBuilder();
-            position_text.setText(currentPosition);
                 if (location.getLocType() == BDLocation.TypeGpsLocation || location.getLocType() == BDLocation.TypeNetWorkLocation) {
                     navigateTo(location);
                 }

@@ -131,12 +131,18 @@ public class WeatherActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_change:
-                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
-                        editor.remove("weather");
-                        editor.apply();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
+                                editor.remove("weather");
+                                editor.apply();
+                                Intent intent = new Intent(WeatherActivity.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+                        }).start();
                         drawerLayout.closeDrawers();
-                        Intent intent = new Intent(WeatherActivity.this,MainActivity.class);
-                        startActivity(intent);
+                        finish();
                         break;
                     case R.id.nav_location:
                         drawerLayout.closeDrawers();
@@ -147,6 +153,7 @@ public class WeatherActivity extends AppCompatActivity {
                                 startActivity(locationIntent);
                             }
                         }).start();
+                        finish();
                         break;
                     default:
                         break;
