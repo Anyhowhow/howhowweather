@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -65,14 +66,14 @@ public class WeatherActivity extends AppCompatActivity {
     private String mWeatherId;
     public DrawerLayout drawerLayout;
     public NavigationView navigationView;
-    private Button button;
-    private CircleImageView circleImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT>=21){
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
         setContentView(R.layout.activity_weather);
         binPicImg = (ImageView)findViewById(R.id.bing_pic_img);
         weatherNow = (ImageView)findViewById(R.id.now_image);
@@ -90,13 +91,16 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.Swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        button = (Button)findViewById(R.id.change_city);
+        Button button = (Button)findViewById(R.id.change_city);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = preferences.getString("weather",null);
         if (weatherString != null){
             Weather weather = Utility.handleWeatherResponse(weatherString);
-            mWeatherId = weather.basic.weatherId;
-            showWeatherInfo(weather);
+            if(weather != null){
+                mWeatherId = weather.basic.weatherId;
+                showWeatherInfo(weather);
+            }
+
         }else {
              mWeatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
@@ -134,6 +138,16 @@ public class WeatherActivity extends AppCompatActivity {
                         Intent intent = new Intent(WeatherActivity.this,MainActivity.class);
                         startActivity(intent);
                         break;
+                    case R.id.nav_location:
+                        drawerLayout.closeDrawers();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent locationIntent = new Intent(WeatherActivity.this,LocationActivity.class);
+                                startActivity(locationIntent);
+                            }
+                        }).start();
+                        break;
                     default:
                         break;
                 }
@@ -145,6 +159,7 @@ public class WeatherActivity extends AppCompatActivity {
     public void GaussianBlur(){
         View navHeader;
         ImageView navBackground;
+        CircleImageView circleImageView;
         Bitmap userImg;
         Bitmap navBackImg;
         navHeader = navigationView.getHeaderView(0);
@@ -260,6 +275,9 @@ public class WeatherActivity extends AppCompatActivity {
             case "小雨":
                 weatherNow.setImageResource(R.drawable.rainy);
                 break;
+            case "中雨":
+                weatherNow.setImageResource(R.drawable.rainy);
+                break;
             case "阵雨":
                 weatherNow.setImageResource(R.drawable.rainy);
                 break;
@@ -297,6 +315,9 @@ public class WeatherActivity extends AppCompatActivity {
                     weatherForecast.setImageResource(R.drawable.overcast_s);
                     break;
                 case "小雨":
+                    weatherForecast.setImageResource(R.drawable.rainy_s);
+                    break;
+                case "中雨":
                     weatherForecast.setImageResource(R.drawable.rainy_s);
                     break;
                 case "阵雨":
