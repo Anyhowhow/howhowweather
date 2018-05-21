@@ -74,9 +74,11 @@ public class Utility {
     }
     public static Weather handleWeatherResponse(String response){
         try{
+            //将天气数据的主题内容解析出来
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
             String weatherContent = jsonArray.getJSONObject(0).toString();
+            //按照定义过的GSON实体类将JSON数据转换为Weather对象
             return new Gson().fromJson(weatherContent,Weather.class);
         }catch (Exception e){
             e.printStackTrace();

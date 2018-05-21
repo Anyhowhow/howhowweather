@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //若已有天气数据的缓存则直接启动天气显示的活动，并结束当前活动，释放内存资源
         if (preferences.getString("weather",null)!=null){
             Intent intent = new Intent(this,WeatherActivity.class);
             startActivity(intent);

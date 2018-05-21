@@ -10,7 +10,7 @@
             android:title="我在哪儿"
             android:icon="@drawable/nav_location"/>
         <item
-            android:id="@+id/nav_about"
+            android:id="@+id/nav_author"
             android:title="关于作者"
             android:icon="@drawable/nav_about"/>
     </group>

@@ -40,7 +40,7 @@ public class LocationActivity extends AppCompatActivity {
         mLocationClient = new LocationClient(getApplicationContext());
         mLocationClient.registerLocationListener(new MyLocationListener());
         SDKInitializer.initialize(getApplicationContext());
-        setContentView(R.layout.activity_location_2);
+        setContentView(R.layout.activity_location);
         position_text = (TextView) findViewById(R.id.position);
         mapView = (MapView) findViewById(R.id.baidumap);
         baiduMap = mapView.getMap();
